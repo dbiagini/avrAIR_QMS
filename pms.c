@@ -125,13 +125,12 @@ static int read_word(uart_word *word, int swap)
 static int read_pms_data_block(pms5003_data_block *data)
 {
   int i;
-  int checksum;
-  int rstat;
+  int checksum = 0;
+  int rstat = 0;
 
   // get time at start an loop through reading 2 bytes from uart until
   // we find a start sequence or we exceed the timeout interval.
-  //clock_t begin;
-  //double elapse_time;
+  uint16_t elapsed_seconds;
 
   // Zero the data structure
   for (i = 0; i < PMS5003_EXPECTED_BYTES; i++)
@@ -144,26 +143,22 @@ static int read_pms_data_block(pms5003_data_block *data)
     return UART_NOT_INITIALIZED;
   }
 
-  //begin = clock();
+  startTimer_s(); //start counting seconds
   uart_word sof;
 
-  while (1)  //dangerously going on forever, currently removed as we don't have a timer available
+  while (1)  //using timer to check if 5 seconds have elapsed
   { //wait for SOF word
-    //elapse_time = (double)(clock() - begin) / CLOCKS_PER_SEC;
-    //if (elapse_time >= 5.0)
-    //{
-      //return UART_TIMEOUT_ERROR;
-    //}
+    elapsed_seconds = getTimer(); //get seconds elapsed
+    if (elapsed_seconds >= 5)
+    {
+      return UART_TIMEOUT_ERROR;
+    }
     rstat = read_word(&sof, 0);
     if (rstat == UART_OK && sof.value == PMS5003_SOF)
     {
       checksum = sof.data[0] + sof.data[1];
       break;
     }
-   /* else if (rstat != UART_OK)
-    {    
-      return rstat; //error occurred
-    }*/
   }
 
   // Now read frame length word
@@ -183,9 +178,7 @@ static int read_pms_data_block(pms5003_data_block *data)
 
   checksum += (packet_length.data[0] + packet_length.data[1]);
 
-  // Now read sensor data, but first wait for rest of data
-  //msleep(50); // 50 milliseconds is plenty for 28 bytes at 9600 baud
-
+  // Now read sensor data
   int rx_cnt = usart_recv( (char*) data->raw_data, PMS5003_EXPECTED_BYTES, 5);
   if (rx_cnt != PMS5003_EXPECTED_BYTES)
   {
@@ -254,11 +247,6 @@ void output_uart_code(int error_code)
 	}
 	if (err_msg != NULL)
 	{
-			//time_t curtime;
-			//char print_time[10];
-			//time(&curtime);
-			//itoa(curtime, print_time, 10);
-			//usart_send(print_time, 10);
 			usart_send(err_msg,strlen(err_msg));
 	}
 }

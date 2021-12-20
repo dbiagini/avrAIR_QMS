@@ -24,7 +24,7 @@
 
 //#define ECHO_MAIN
 //#define UART_TEST
-//#define PMS_DATA
+#define PMS_DATA
 //#define TIMER_TEST
 //#ifndef F_CPU
 //#define F_CPU 16000000UL                    // set the CPU clock
@@ -142,11 +142,6 @@ while(1)
 {
 	status = read_pms5003_data(&d);
 	if (status != UART_OK) {
-			//PORTD |= 0x80;
-			//char err[4] = "    ";
-			//itoa(status, err, 10);
-			//usart_send(gen_err, 9);
-			//usart_send(err, 2);
 			output_uart_code(status);
 		} else {
 		itoa(d.pm1cf, out_value, 10);
@@ -159,7 +154,7 @@ while(1)
 		usart_send(pm2_10_string, 10);
 		usart_send(out_value, 2);
 	}
-	_delay_ms(2000);
+	//_delay_ms(100);
 }
 
 #endif

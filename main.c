@@ -9,26 +9,30 @@
 #define F_CPU 8000000L
 #endif
 
+//#define TIMER_H
 #include "./usart.h"
 #include <stdlib.h>
 #include <util/delay.h>
 #include "./pms.h"
+#include "./timer.h"
+
 
 
 #define BAUD 9600                           // define baud
-#ifndef F_CPU
-#define F_CPU 8000000L
-#endif
 
 #define BAUDRATE ((F_CPU)/(BAUD*16UL)-1)    // set baudrate value for UBRR
 
 //#define ECHO_MAIN
 //#define UART_TEST
-#define PMS_DATA
+//#define PMS_DATA
+//#define TIMER_TEST
 //#ifndef F_CPU
 //#define F_CPU 16000000UL                    // set the CPU clock
 //#endif
 //#include <util/delay.h>
+
+//#define TIMER_TEST
+
 
 
 // function to initialize UART
@@ -157,6 +161,68 @@ while(1)
 	}
 	_delay_ms(2000);
 }
+
+#endif
+#ifdef TIMER_TEST
+	usart_init();                            // initialize UART
+	// Set timer to use function timerFunc
+	//setTimerCallback(timerFunc);
+	// Start timer with an interval of 1.5 seconds
+	char test_end[] = "Test End \n";
+	char next_line[] = "\n";
+	char success[10] = "Success \n";
+	char failure[10] = "Failure \n";
+	char test_start[10] = "Test";
+	char seconds[2]; // up to 99
+	char milliseconds[4]; // up to 9999
+	sei();
+	startTimer_s();
+	usart_send(test_start,5); //sends two bites out
+	usart_send(next_line,1); //sends two bites out
+	uint16_t previous = 0;
+	while(1)
+	{
+		uint16_t secs = getTimer();
+		if (previous != secs){
+			itoa(secs, seconds, 10);
+			usart_send(seconds,2); //sends two bites out
+			usart_send(next_line,1); //sends two bites out
+			previous = secs;
+		}
+		if(previous >= 10) break;
+		_delay_ms(500);
+	}
+	stopTimer();
+	_delay_ms(2000);
+	uint16_t secs = getTimer();
+	if(secs == 0) usart_send(success, 10); //we're expecting 0
+	else {
+		usart_send(failure, 10);
+		itoa(secs, seconds, 10);
+		usart_send(seconds,2); 
+	}
+	//test ms
+	usart_send(test_start,5); 
+	usart_send(next_line,1); //sends two bites out
+	previous = 0;
+	startTimer_ms();
+	while(1)
+	{
+		uint16_t mills = getTimer();
+		//itoa(mills, milliseconds, 10);
+		//usart_send(milliseconds,4); //sends two bites out
+		//usart_send(next_line,1); //sends two bites out
+		if (previous != mills){
+			itoa(mills, milliseconds, 10);
+			usart_send(milliseconds,4); //sends two bites out
+			usart_send(next_line,1); //sends two bites out
+			previous = mills;
+		}
+		if(previous >= 2000) break;
+		_delay_ms(100);
+	}
+	usart_send(test_end,10); 
+	stopTimer();
 
 #endif
 

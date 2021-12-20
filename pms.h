@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <util/delay.h>
-#include <time.h>
+#include "./timer.h"
 
 /**
  * Library UART error codes

@@ -6,7 +6,7 @@
  */ 
 
 #ifndef F_CPU
-#define F_CPU 8000000L
+#define F_CPU 16000000L
 #endif
 
 //#define TIMER_H
@@ -15,6 +15,7 @@
 #include <util/delay.h>
 #include "./pms.h"
 #include "./timer.h"
+#include "./dht11.h"
 
 
 
@@ -24,7 +25,8 @@
 
 //#define ECHO_MAIN
 //#define UART_TEST
-#define PMS_DATA
+//#define PMS_DATA
+#define DHT_TEST
 //#define TIMER_TEST
 //#ifndef F_CPU
 //#define F_CPU 16000000UL                    // set the CPU clock
@@ -220,6 +222,63 @@ while(1)
 	stopTimer();
 
 #endif
+
+#ifdef DHT_TEST
+
+	char message[]= "DHT11 test \n";
+	char message1[]= "DHT11 Fail \n";
+	char temperature[2]= "  ";
+	char next_line[1]= "\n";
+	uint8_t ret = DHT_OK;
+	uint8_t data[5] = { 0, 0, 0, 0, 0 };
+	usart_init();                            // initialize UART
+	sei();
+
+	usart_send(message, 12);
+
+
+	while ( 1 )
+	{
+		_delay_ms( 3000 );
+		if( DHT_OK == DHT11ReadData(data)){
+			char temp[3];
+			char temp_d[3];
+			char hum[3];
+			char hum_d[3];
+			char next_line[1]= "\n";
+			char dot[1]=".";
+			itoa(data[0], hum, 10);
+			itoa(data[1], hum_d, 10);
+			itoa(data[2], temp, 10);
+			itoa(data[3], temp_d, 10);
+			usart_send(hum, 3);
+			usart_send(dot, 1);
+			usart_send(hum_d, 3);
+			usart_send(next_line, 1);
+			usart_send(temp, 3);
+			usart_send(dot, 1);
+			usart_send(temp_d, 3);
+			usart_send(next_line, 1);
+		} else {
+			usart_send(message1, 12);
+			//_delay_ms( 3000 );
+			//break;
+		}
+		
+		//if( DHT_OK == read_dht11_dat(data)){
+			////itoa(data[2], temperature, 10);
+			////usart_send(temperature, 2);
+			////usart_send(next_line, 1);
+			//} else {
+			//usart_send(message1, 12);
+			////_delay_ms( 3000 );
+			////break;
+		//}
+	}
+
+
+#endif
+
 
 	return 0;
 }

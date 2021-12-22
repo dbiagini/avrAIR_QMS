@@ -14,7 +14,7 @@
 ********************************************************************************/
 
 #ifndef F_CPU
-#define F_CPU 8000000L
+#define F_CPU 16000000L
 #endif
 #ifndef BAUD
 #define BAUD 9600                           // define baud for the uart

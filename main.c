@@ -16,6 +16,7 @@
 #include "./pms.h"
 #include "./timer.h"
 #include "./dht11.h"
+#include "./ssd1331.h"
 
 
 
@@ -26,7 +27,8 @@
 //#define ECHO_MAIN
 //#define UART_TEST
 //#define PMS_DATA
-#define DHT_TEST
+//#define DHT_TEST
+#define OLED_TEST
 //#define TIMER_TEST
 //#ifndef F_CPU
 //#define F_CPU 16000000UL                    // set the CPU clock
@@ -276,6 +278,35 @@ while(1)
 		//}
 	}
 
+
+#endif
+
+#ifdef OLED_TEST
+
+
+char message[]= "OLED test \n";
+char message1[]= "bitmap write \n";
+char next_line[1]= "\n";
+
+usart_init();                            // initialize UART
+sei();
+usart_send(message, 12);
+
+
+while ( 1 )
+{
+	_delay_ms( 3000 );
+	SSD1331_begin();
+	//_delay_ms( 2000 );
+	SSD1331_clear();
+	
+	usart_send(message, 14);
+	/* display an image of bitmap matrix */
+	//SSD1331_mono_bitmap(0, 0, waveshare_logo, 96, 64, BLUE);
+	_delay_ms( 2000 );
+	
+	SSD1331_clear();
+}
 
 #endif
 

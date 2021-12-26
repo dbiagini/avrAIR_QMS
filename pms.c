@@ -221,28 +221,28 @@ void output_uart_code(int error_code)
 		strcpy(err_msg,"Status: No data returned from UART");
 		break;
 		case UART_NOT_INITIALIZED:
-		strcpy(err_msg,"Status: UART not initialized");
+		strcpy(err_msg,"Status: UART not initialized \n");
 		break;
 		case UART_INIT_ERROR:
-		strcpy(err_msg,"ERROR: UART initialization error");
+		strcpy(err_msg,"ERROR: UART initialization error \n");
 		break;
 		case UART_PARAMETER_ERROR:
-		strcpy(err_msg,"ERROR: Incorrect UART parmeters provided");
+		strcpy(err_msg,"ERROR: Incorrect UART parameters provided \n");
 		break;
 		case UART_TX_ERROR:
-		strcpy(err_msg,"ERROR: UART transmit problem");
+		strcpy(err_msg,"ERROR: UART transmit problem \n");
 		break;
 		case UART_RX_ERROR:
-		strcpy(err_msg,"ERROR: UART recieve problem");
+		strcpy(err_msg,"ERROR: UART recive problem \n");
 		break;
 		case UART_UNEXPECTED_DATA_ERROR:
-		strcpy(err_msg,"ERROR: PMS5003 unexpected data. Block size does not match data structure");
+		strcpy(err_msg,"ERROR: PMS5003 unexpected data. Block size does not match data structure \n");
 		break;
 		case UART_CHECKSUM_ERROR:
-		strcpy(err_msg,"ERROR: PMS5003 data checksum error");
+		strcpy(err_msg,"ERROR: PMS5003 data checksum error \n");
 		break;
 		case UART_TIMEOUT_ERROR:
-		strcpy(err_msg, "ERROR: PMS5003 read timeout error");
+		strcpy(err_msg, "ERROR: PMS5003 read timeout error \n");
 		break;
 	}
 	if (err_msg != NULL)

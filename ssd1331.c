@@ -27,7 +27,6 @@
 unsigned int rotate=0;
 //char error[]="Erorr /n";
 void command(uint8_t cmd) {
-    //digitalWrite(OLED_DC, LOW);
 	OLED_DC_PORT &= ~(1 << OLED_DC_PIN);
 	SPI_SS_Enable();
     SPIWrite(&cmd, 1);
@@ -45,20 +44,11 @@ uint8_t SPIWrite(uint8_t *buffer, int bufferLength) {
 
 void SSD1331_begin()
 {
-    //pinMode(OLED_RST, OUTPUT);
-    //pinMode(OLED_DC, OUTPUT);
-    //pinMode(OLED_CS, OUTPUT);
-	
+    	
 	OLED_RST_DDR |= (1 << OLED_RST_PIN); // set RST pin to output
 	OLED_DC_DDR |= (1 << OLED_DC_PIN); // set DC pin to output
-	//OLED_CS_DDR |= (1 << OLED_CS_PIN); // set pin to output //this is done below
 	SPI_Init();
 
-    //digitalWrite(OLED_RST, HIGH);
-    //delay(10);
-    //digitalWrite(OLED_RST, LOW);
-    //delay(10);
-    //digitalWrite(OLED_RST, HIGH);
 	
 	OLED_RST_PORT |= 1 << OLED_RST_PIN;  //reset high
 	_delay_ms(10);
@@ -155,7 +145,7 @@ void SSD1331_draw_point(int x, int y, unsigned short hwColor) {
     command(SET_ROW_ADDRESS);
     command(y);                 //page atart address
     command(OLED_HEIGHT - 1);   //page end address
-    //digitalWrite(OLED_DC, HIGH);
+    
 	OLED_DC_PORT |= 1 << OLED_DC_PIN;  //reset high
     
     buffer[0] = (hwColor & 0xFF00) >> 8;

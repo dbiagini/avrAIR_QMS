@@ -143,14 +143,15 @@ static int read_pms_data_block(pms5003_data_block *data)
     return UART_NOT_INITIALIZED;
   }
 
-  startTimer_s(); //start counting seconds
+  startTimer1_s(); //start counting seconds
   uart_word sof;
 
   while (1)  //using timer to check if 5 seconds have elapsed
   { //wait for SOF word
-    elapsed_seconds = getTimer(); //get seconds elapsed
+    elapsed_seconds = getTimer1(); //get seconds elapsed
     if (elapsed_seconds >= 5)
     {
+	  stopTimer1();
       return UART_TIMEOUT_ERROR;
     }
     rstat = read_word(&sof, 0);
@@ -160,6 +161,8 @@ static int read_pms_data_block(pms5003_data_block *data)
       break;
     }
   }
+
+  stopTimer1();
 
   // Now read frame length word
   uart_word packet_length;

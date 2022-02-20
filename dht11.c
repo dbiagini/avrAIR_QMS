@@ -19,9 +19,7 @@
 uint8_t DHT11ReadData(uint8_t *dht11_data){
 	uint8_t sensor_bytes, bits, buffer=0, timeout=0, checksum;
 	
-	/* Initialise sensor if flag is 0 then set to 1 to run only once */
-	//if(DHT11Init == 0) DHT11Setup();
-	
+
 	/* Send START signal to sensor */
 	DHT_DDR |= (1 << DHT_PIN_BIT); // set pin to output
 	DHT_PORT &= ~(1 << DHT_PIN_BIT); // set pin LOW
@@ -48,8 +46,6 @@ uint8_t DHT11ReadData(uint8_t *dht11_data){
 		return DHT_ERR; // error code
 	}
 	
-		//PORTD |= 0x10;
-
 	/* Ready to read data from sensor */
 	for(sensor_bytes=0; sensor_bytes<5; sensor_bytes++){
 		/* Reset the buffer */
@@ -89,7 +85,7 @@ uint8_t DHT11ReadData(uint8_t *dht11_data){
 			}
 		}
 		
-		/* Dump the buffer to global array */
+		/* Dump the buffer to input array */
 		dht11_data[sensor_bytes] = buffer;
 	}
 	

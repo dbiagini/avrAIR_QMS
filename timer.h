@@ -14,12 +14,12 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-void setTimer_ms(uint16_t milliseconds);
-void setTimer_s(uint16_t seconds);
-void startTimer_s();
-void startTimer_ms();
-void stopTimer();
-uint16_t getTimer(); //returns the time unit passed (either s or ms)
-void setTimerCallback(void (*func)());
+void setTimer1_ms(uint16_t milliseconds);
+void setTimer1_s(uint16_t seconds);
+void startTimer1_s();
+void startTimer1_ms();
+void stopTimer1();
+uint16_t getTimer1(); //returns the time unit passed (either s or ms)
+void setTimer1Callback(void (*func)());
 
 #endif

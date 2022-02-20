@@ -24,7 +24,6 @@
 #define DHT_OK      0
 #define DHT_ERR     1
 
-//uint8_t read_dht11_dat(uint8_t *dht_11_dat);
 uint8_t DHT11ReadData(uint8_t *dht11_data);
 
 #endif /* DHT11_H */

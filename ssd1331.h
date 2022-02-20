@@ -39,9 +39,7 @@
 
 #define OLED_RST_PIN      PA1 //replace these below with io Pins definitions
 #define OLED_DC_PIN       PA0
-//#define OLED_CS_PIN       PB4
-//#define SPI_MOSI_PIN      11     /* connect to the DIN pin of OLED */
-//#define SPI_SCK_PIN       13     /* connect to the CLK pin of OLED */
+
 
 #define RGB(R,G,B)  (((R >> 3) << 11) | ((G >> 2) << 5) | (B >> 3))
 enum Color {

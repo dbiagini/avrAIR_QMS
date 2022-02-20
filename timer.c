@@ -31,12 +31,12 @@
 
 //void (*timerCallback)();
 
-volatile uint16_t total_units;  //currently the size of this variable is the limit for counting time units
-uint16_t targetTime;
+volatile uint16_t total_units_timer1;  //currently the size of this variable is the limit for counting time units
+uint16_t targetTime_timer1;
 
-void startTimer_s() {
+void startTimer1_s() {
 	// start timer with interrupt every second.
-    total_units = 0 ; //initialize unit total
+    total_units_timer1 = 0 ; //initialize unit total
 	// Enable timer, CLKio/8, Clear Timer on Compare
 	TCCR1A |= 0;
 	TCCR1B = (1 << WGM12)| (1 << CS12); // Mode = CTC, Prescaler = 256
@@ -57,10 +57,10 @@ void startTimer_s() {
 	
 }
 
-void startTimer_ms() {
+void startTimer1_ms() {
 	// start timer with interrupt every millisecond.
 
-    total_units = 0 ; //initialize unit total
+    total_units_timer1 = 0 ; //initialize unit total
 	// Enable timer, CLKio/8, Clear Timer on Compare
 	TCCR1A |= 0;
 	TCCR1B = (1 << WGM12)| (1 << CS11); // Mode = CTC, Prescaler = 8
@@ -80,27 +80,27 @@ void startTimer_ms() {
 	TIMSK |= (1 << OCIE1A);
 }
 
-void setTimer_ms(uint16_t in_time) {
-	targetTime = in_time;
-	startTimer_ms();
+void setTimer_1ms(uint16_t in_time) {
+	targetTime_timer1 = in_time;
+	startTimer1_ms();
 }
-void setTimer_s(uint16_t in_time) {
-	targetTime = in_time;
-	startTimer_s();
+void setTimer1_s(uint16_t in_time) {
+	targetTime_timer1 = in_time;
+	startTimer1_s();
 }
-uint16_t getTimer(){	
+uint16_t getTimer1(){	
 	
 	uint16_t unit_to_ret = 0;
 	
 	ATOMIC_BLOCK(ATOMIC_FORCEON) {
-		unit_to_ret = total_units;
+		unit_to_ret = total_units_timer1;
 	}
 	return unit_to_ret ;
 }
-void stopTimer() {
+void stopTimer1() {
 	// disable timer interrupts
 	TIMSK &= ~(1 << OCIE1A);
-	total_units = 0; //reset units counter
+	total_units_timer1 = 0; //reset units counter
 }
 //void setTimerCallback(void (*func)()) {
 	//timerCallback = func;
@@ -108,7 +108,7 @@ void stopTimer() {
 
 ISR(TIMER1_COMPA_vect) {
 	//timer is cleared on compare
-	total_units++;  //increment the counted time units
+	total_units_timer1++;  //increment the counted time units
 	//if (total_units == targetTime) {
 		//total_units = 0;
 		//timerCallback();

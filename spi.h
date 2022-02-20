@@ -14,8 +14,6 @@
 #define MISO PB6
 #define SCK PB7
 #define SS PB4
-//#define DC 1
-//#define RST 0
 
 void SPI_SS_Enable();
 void SPI_SS_Disable();
